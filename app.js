@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const connectDB = require('./config/database')
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
+const agendamentoRoutes = require('./routes/agendamentos')
 const cookieParser = require('cookie-parser')
 const User = require('./models/User')
 require('dotenv').config()
@@ -89,6 +90,8 @@ app.get('/reset/:token', async (req, res) => {
 app.use('/auth', authRoutes)
 app.use('/user', userRoutes)  // Usando as rotas do usuário
 app.use('/api/auth', authRoutes) // 
+app.use('/agendamentos', agendamentoRoutes)
+
 app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).send('Algo deu errado!')

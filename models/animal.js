@@ -34,14 +34,15 @@ const animalSchema = new mongoose.Schema({
 });
 
 // Middleware para cascading delete
-animalSchema.pre('remove', function(next) {
-    this.model('User').updateOne(
-        { _id: this.usuario },
-        { $pull: { animais: this._id } },
-        next
+animalSchema.pre('remove', function(next) {  // Remove todos os animais do usuário
+    this.model('User').updateOne(            // Atualiza o usuário
+        { _id: this.usuario },               // Filtra pelo usuário
+        { $pull: { animais: this._id } },    // Remove o animal do array de animais
+        { multi: true },                     // Remove todos os animais
+        next                                 // Chama o próximo middleware
     );
 });
 
 
-const Animal = mongoose.model('Animal', animalSchema)
-module.exports = Animal
+const Animal = mongoose.model('Animal', animalSchema) // Cria o modelo de animal
+module.exports = Animal                               // Exporta o modelo de animal
