@@ -50,7 +50,7 @@ router.post('/agendar', verifyToken, async (req, res) => {
         const novoAgendamento = new Agendamento({
             nomeMedico,
             nomeAnimal: animal._id,
-            tipoDeAnimal: animal.tipo || 'cachorro', // Assumindo que existe um campo tipo no modelo Animal
+            tipoDeAnimal: animal.tipo,
             dataAgendamento,
             disponivel: false,
             usuario: req.user
@@ -89,7 +89,7 @@ router.delete('/cancelar/:id', verifyToken, async (req, res) => {
     try {
         const agendamento = await Agendamento.findOne({
             _id: req.params.id,
-            usuario: req.user
+            usuario: req.user,
         });
 
         if (!agendamento) {
@@ -101,9 +101,12 @@ router.delete('/cancelar/:id', verifyToken, async (req, res) => {
             return res.status(400).json({ message: 'Não é possível cancelar agendamentos passados' });
         }
 
-        await agendamento.remove();
+        // Excluir o agendamento
+        await Agendamento.deleteOne({ _id: agendamento._id });
+
         res.json({ message: 'Agendamento cancelado com sucesso' });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ message: 'Erro ao cancelar agendamento' });
     }
 });

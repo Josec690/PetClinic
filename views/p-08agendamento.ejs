@@ -253,22 +253,21 @@
         }
     
         async function cancelarAgendamento(id) {
-            if (!confirm('Tem certeza que deseja cancelar este agendamento?')) return;
-            
-            try {
-                const response = await fetch(`/agendamentos/cancelar/${id}`, {
-                    method: 'DELETE',
-                });
-                
-                if (!response.ok) throw new Error('Erro ao cancelar agendamento');
-                
-                mostrarSucesso('Agendamento cancelado com sucesso!');
-                carregarAgendamentos(); // Recarrega a lista
-            } catch (error) {
-                console.error('Erro ao cancelar agendamento:', error);
-                mostrarErro('Erro ao cancelar agendamento. Tente novamente.');
+            if (confirm('Deseja cancelar este agendamento?')) {
+                try {
+                    const response = await fetch(`/agendamentos/cancelar/${id}`, { method: 'DELETE' });
+                    if (!response.ok) throw new Error('Erro ao cancelar');
+                    carregarAgendamentos();
+                } catch (error) {
+                    alert('Não foi possível cancelar.');
+                }
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarAnimais();
+            carregarAgendamentos();
+        });
     
         // Adicione esta linha ao seu DOMContentLoaded
         document.addEventListener('DOMContentLoaded', function() {
