@@ -10,11 +10,7 @@ const AgendamentoSchema = new mongoose.Schema({
         ref: 'Animal',
         required: true,
     },
-    tipoDeAnimal: {
-        type: String,
-        required: true,
-        enum: ['gato', 'cachorro'], // Limita o campo a 'gato' ou 'cachorro'
-    },
+    
     dataAgendamento: {
         type: Date,
         required: true,

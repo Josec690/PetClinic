@@ -50,7 +50,6 @@ router.post('/agendar', verifyToken, async (req, res) => {
         const novoAgendamento = new Agendamento({
             nomeMedico,
             nomeAnimal: animal._id,
-            tipoDeAnimal: animal.tipo,
             dataAgendamento,
             disponivel: false,
             usuario: req.user
