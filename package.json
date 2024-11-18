@@ -18,7 +18,13 @@
   "name": "petclinic",
   "version": "1.0.0",
   "description": "# Projeto Crastação para Hospitais Públicos Veterianários",
-  "main": "app.js",
+  "main": "app.js", 
+  "scripts": {
+    "start": "NODE_ENV=development node app.js",
+    "build": "npm install",
+    "dev": "NODE_ENV=production nodemon app.js",
+    "dev:windows": "set NODE_ENV=production&& nodemon app.js"
+  },  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Josec690/PetClinic.git"
@@ -28,5 +34,5 @@
   "bugs": {
     "url": "https://github.com/Josec690/PetClinic/issues"
   },
-  "homepage": "https://github.com/Josec690/PetClinic#readme"
+  "homepage": "https://github.com/Josec690/PetClinic#readme"  
 }

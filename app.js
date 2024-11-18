@@ -11,10 +11,6 @@ require('dotenv').config()
 
 const app = express()
 
-// Conectar ao MongoDB
-connectDB()
-
-
 
 app.use(bodyParser.urlencoded({ extended: false })) //  Middleware para analisar os dados do formulário
 app.use(bodyParser.json()) // Middleware para analisar os dados JSON
@@ -29,6 +25,10 @@ app.set('view engine', 'ejs') // Definir o mecanismo de visualização como EJS
 
 // Definir o diretório de views (opcional, se for diferente de 'views')
 app.set('views', path.join(__dirname, 'views'))
+
+// Conectar ao MongoDB
+connectDB().catch(console.error)
+
 
 // Rotas para renderizar as páginas EJS
 app.get('/cadastrar', (req, res) => {
@@ -92,10 +92,22 @@ app.use('/user', userRoutes)  // Usando as rotas do usuário
 app.use('/api/auth', authRoutes) // 
 app.use('/agendamentos', agendamentoRoutes)
 
+// Error handler
 app.use((err, req, res, next) => {
     console.error(err.stack)
-    res.status(500).send('Algo deu errado!')
+    res.status(500).json({ error: 'Algo deu errado!', details: err.message })
 })
+
+// Handler para rotas não encontradas
+app.use((req, res) => {
+    res.status(404).json({ error: 'Rota não encontrada' })
+})
+
 // Porta do servidor
 const PORT = process.env.PORT || 5500
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
+
+if (process.env.NODE_ENV !== 'production') {    
+    app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
+}
+
+module.exports = app

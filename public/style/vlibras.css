@@ -1,0 +1,29 @@
+div[vw].enabled {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;    
+    z-index: 10000;
+    transform: translateY(100%);
+    transition: transform 0.3s;
+}
+
+div[vw].enabled.active {
+    transform: translateY(0);
+}
+
+div[vw-access-button] {
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 4px;
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+div[vw-plugin-wrapper] {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
