@@ -5,6 +5,10 @@ const AgendamentoSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    especialidade: {
+        type: String,
+        required: true
+    },
     nomeAnimal: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Animal',

@@ -36,7 +36,8 @@ router.post('/agendar', verifyToken, async (req, res) => {
         // Verificar se já existe agendamento no mesmo horário
         const agendamentoExistente = await Agendamento.findOne({
             dataAgendamento,
-            disponivel: false
+            disponivel: false,
+            status: 'agendado' // Adicionar verificação de status
         });
 
         if (agendamentoExistente) {
@@ -51,6 +52,7 @@ router.post('/agendar', verifyToken, async (req, res) => {
             nomeMedico,
             nomeAnimal: animal._id,
             dataAgendamento,
+            especialidade,
             disponivel: false,
             usuario: req.user
         });
@@ -73,12 +75,58 @@ router.post('/agendar', verifyToken, async (req, res) => {
 // Rota para listar agendamentos do usuário
 router.get('/meus-agendamentos', verifyToken, async (req, res) => {
     try {
-        const agendamentos = await Agendamento.find({ usuario: req.user })
-            .populate('nomeAnimal')
-            .sort({ dataAgendamento: 1 });
+        // Pegar a data atual com hora atual
+        const agora = new Date();
 
-        res.json(agendamentos);
+        // Pegar a data atual no início do dia
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        const agendamentos = await Agendamento.find({ 
+            usuario: req.user,
+            status: 'agendado',
+            $or: [
+                // Agendamentos futuros
+                { dataAgendamento: { $gt: agora } },
+                // Agendamentos de hoje que ainda não passaram
+                {
+                    dataAgendamento: {
+                        $gte: hoje,
+                        $gte: agora
+                    }
+                }
+            ]
+        })
+        .populate('nomeAnimal')
+        .sort({ dataAgendamento: 1 })
+            
+
+        // Filtrar agendamentos com animais excluídos e atualizar seus status
+        const agendamentosFiltrados = [];
+        for (let agendamento of agendamentos) {
+            if (!agendamento.nomeAnimal) {
+                // Se o animal não existe mais, atualizar o status do agendamento
+                await Agendamento.findByIdAndUpdate(agendamento._id, {
+                    status: 'cancelado',
+                    disponivel: true
+                });
+                continue;
+            }
+            // Verificar se o horário do agendamento já passou
+            const dataAgendamento = new Date(agendamento.dataAgendamento);
+            if (dataAgendamento < agora) {
+                // Atualizar status para 'realizado' se o horário já passou
+                await Agendamento.findByIdAndUpdate(agendamento._id, {
+                    status: 'realizado'
+                });
+                continue;
+            }
+            agendamentosFiltrados.push(agendamento);
+        }
+
+        res.json(agendamentosFiltrados);
     } catch (err) {
+        console.error('Erro ao buscar agendamentos:', err);
         res.status(500).json({ message: 'Erro ao buscar agendamentos' });
     }
 });
@@ -96,12 +144,16 @@ router.delete('/cancelar/:id', verifyToken, async (req, res) => {
         }
 
         // Verificar se o agendamento está no futuro
-        if (new Date(agendamento.dataAgendamento) < new Date()) {
-            return res.status(400).json({ message: 'Não é possível cancelar agendamentos passados' });
+        const agora = new Date();
+        if (new Date(agendamento.dataAgendamento) <= agora) {
+            return res.status(400).json({ message: 'Não é possível cancelar agendamentos passados ou em andamento' });
         }
 
-        // Excluir o agendamento
-        await Agendamento.deleteOne({ _id: agendamento._id });
+        // Atualizar o status do agendamento
+        await Agendamento.findByIdAndUpdate(agendamento._id, {
+            status: 'cancelado',
+            disponivel: true
+        });
 
         res.json({ message: 'Agendamento cancelado com sucesso' });
     } catch (err) {

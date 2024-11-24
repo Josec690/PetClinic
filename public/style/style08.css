@@ -177,3 +177,47 @@ main{
 @keyframes spinner-border {
     to { transform: rotate(360deg); }
 }
+.agendamento-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.agendamento-card h5 {
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    background: #e9ecef;
+}
+
+.status-agendado {
+    border-left: 4px solid #28a745;
+}
+
+h4 {
+    color: #333;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Espaçamento entre as seções */
+#listaAgendamentos > div.col-12 {
+    margin-bottom: 2rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .agendamento-card {
+        margin-bottom: 1rem;
+    }
+}
