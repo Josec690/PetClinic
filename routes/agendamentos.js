@@ -98,9 +98,8 @@ router.get('/meus-agendamentos', verifyToken, async (req, res) => {
             ]
         })
         .populate('nomeAnimal')
-        .sort({ dataAgendamento: 1 })
+        .sort({ dataAgendamento: 1 });
             
-
         // Filtrar agendamentos com animais excluídos e atualizar seus status
         const agendamentosFiltrados = [];
         for (let agendamento of agendamentos) {
@@ -124,7 +123,11 @@ router.get('/meus-agendamentos', verifyToken, async (req, res) => {
             agendamentosFiltrados.push(agendamento);
         }
 
-        res.json(agendamentosFiltrados);
+        // Retornar os agendamentos filtrados e a contagem
+        res.json({
+            totalAgendamentos: agendamentosFiltrados.length,
+            agendamentos: agendamentosFiltrados
+        });
     } catch (err) {
         console.error('Erro ao buscar agendamentos:', err);
         res.status(500).json({ message: 'Erro ao buscar agendamentos' });
