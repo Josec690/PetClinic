@@ -10,51 +10,140 @@ main {
 
 /* Header */
 header {
+    width: 100%;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 120px;
-    padding: 0 20px;
-    background-color: white;
-    
-    top: 0;
-    z-index: 10;
+    padding: 10px 20px;
+    max-width: 1200px;
+    margin: auto;
 }
 
 .logo-header img {
-    width: 120px;
-    height: auto;
+    height: 50px;
 }
 
-.header-info ul {
+.nav-links {
+    list-style: none;
     display: flex;
     gap: 20px;
-    list-style: none;
-    text-transform: uppercase;
 }
 
-.header-info li {
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
+.nav-links li {
+    display: inline;
 }
 
-.header-info li:hover {
-    color: blue;
-}
-
-.header-login a {
+.nav-links a {
     text-decoration: none;
-    color: #000;
-    font-weight: 500;
-    padding: 8px 15px;
-    border: 1px solid black;
-    border-radius: 5px;
-    transition: 0.3s;
+    color: #333;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
 
-.header-login a:hover {
-    background-color: blue;
-    color: white;
+.nav-links a:hover {
+    color: #007bff;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-actions a {
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-login {
+    background-color: #fff;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.btn-login:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-signup {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-signup:hover {
+    background-color: #0056b3;
+}
+
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.hamburger {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    display: block;
+    position: relative;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: "";
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    display: block;
+    position: absolute;
+    left: 0;
+    transition: transform 0.3s ease;
+}
+
+.hamburger::before {
+    top: -8px;
+}
+
+.hamburger::after {
+    bottom: -8px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background-color: #f8f9fa;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-actions {
+        display: none;
+    }
+
+    .nav-toggle {
+        display: block;
+    }
 }
 
 /* Container1 - Apresentação */
@@ -93,9 +182,11 @@ header {
 
 /* Container2 - Dados do Usuário */
 .container2 {
+    display: grid;
     width: 100%;
     background-color: #e0e0e0;
     padding: 40px 0;
+    justify-content: center;
     text-align: center;
 }
 
@@ -144,6 +235,67 @@ header {
     margin-top: 10px;
 }
 
+/*Animal-Card*/
+.animal-card {
+    display: grid;
+    width: 50vw;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 50px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+}
+
+.animal-info {
+    margin-bottom: 10px;
+}
+
+.animal-info p {
+    margin: 5px 0;
+}
+
+.animal-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit,
+.btn-danger {
+    padding: 5px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.error {
+    color: #dc3545;
+    text-align: center;
+    padding: 10px;
+}
 
 body {
     

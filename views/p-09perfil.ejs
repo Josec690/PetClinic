@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,22 +11,32 @@
     <link rel="icon" href="/img/PatClinic.png">
     <script src="/js/vlibras.js"></script>
 </head>
+
 <body>
+    
     <header>
-        <nav class="logo-header">
-            <img src="/img/PatClinic.png" alt="Logo">
-        </nav>
-        <nav class="header-info">
-            <ul>
+        <nav class="navbar">
+            <div class="logo-header">
+                <img src="/img/PatClinic.png" alt="Logo da Pata Clinic">
+            </div>
+    
+            <ul class="nav-links">
                 <li><a href="/">Início</a></li>
-                <li><a href="/sobre">Sobre</a></li>
-                <li><a href="/contato">Contato</a></li>
+                <li><a href="#about">Quem Somos</a></li>
+                <li><a href="#contact">Contato</a></li>
+
             </ul>
+    
+            <div class="nav-actions">
+                <a href="/agendar" class="btn-login">Agendar Castração 🐈‍⬛</a>
+                <a href="/cadastrarAnimal" class="btn-signup">Cadastro do Animal 🐈</a>
+            </div>
+    
+            <button class="nav-toggle" aria-label="Abrir Menu">
+                <span class="hamburger"></span>
+            </button>
         </nav>
-        <nav class="header-login"> 
-            <a href="/agendar">Agendar Castração</a>           
-            <a href="/cadastrarAnimal">Cadastro do Animal</a>
-        </nav>
+                                                                        
     </header>
 
     <main>
@@ -43,11 +54,17 @@
             <div class="content1">
                 <h3>Informações do Usuário</h3>
                 <div id="userInfo">
-                    <p>Nome: <span id="displayNome"><%= usuario.nome %></span></p>
-                    <p>Email: <span id="displayEmail"><%= usuario.email %></span></p>
-                    <p>Telefone: <span id="displayTelefone"><%= usuario.telefone %></span></p>
+                    <p>Nome: <span id="displayNome">
+                            <%= usuario.nome %>
+                        </span></p>
+                    <p>Email: <span id="displayEmail">
+                            <%= usuario.email %>
+                        </span></p>
+                    <p>Telefone: <span id="displayTelefone">
+                            <%= usuario.telefone %>
+                        </span></p>
                 </div>
-                
+
                 <form id="updateForm" style="display: none;">
                     <div class="form-group">
                         <label for="nome">Nome:</label>
@@ -71,7 +88,7 @@
             <div class="content2">
                 <h3>Meus Animais</h3>
                 <div id="animaisLista"></div>
-            
+
                 <script>
                     // Função para carregar os animais
                     async function carregarAnimais() {
@@ -81,7 +98,7 @@
                                 throw new Error('Erro ao buscar animais');
                             }
                             const animais = await response.json();
-                            
+
                             const animaisLista = document.getElementById('animaisLista');
                             animaisLista.innerHTML = '';
 
@@ -89,7 +106,7 @@
                                 animaisLista.innerHTML = '<p>Nenhum animal cadastrado.</p>';
                                 return;
                             }
-            
+
                             animais.forEach(animal => {
                                 const animalDiv = document.createElement('div');
                                 animalDiv.className = 'animal-card';
@@ -111,13 +128,13 @@
                             });
                         } catch (err) {
                             console.error('Erro ao carregar animais:', err);
-                            document.getElementById('animaisLista').innerHTML = 
+                            document.getElementById('animaisLista').innerHTML =
                                 '<p class="error">Erro ao carregar os animais. Por favor, tente novamente mais tarde.</p>';
                         }
                     }
-                        
-                    
-            
+
+
+
                     // Função para editar animal
                     async function editarAnimal(id) {
                         try {
@@ -130,7 +147,7 @@
                             const rga = animalDiv.querySelector('[data-rga]').textContent;
                             const idade = animalDiv.querySelector('[data-idade]').textContent.split(' ')[0];
                             const peso = animalDiv.querySelector('[data-peso]').textContent.split(' ')[0];
-                    
+
                             animalDiv.innerHTML = `
                                 <form onsubmit="salvarEdicao(event, '${id}')" class="edit-form">
                                     <div class="form-group">
@@ -168,7 +185,7 @@
                     // Função para salvar a edição
                     async function salvarEdicao(event, id) {
                         event.preventDefault();
-                        
+
                         const form = event.target;
                         const formData = {
                             nome: form.nome.value,
@@ -198,7 +215,7 @@
                             alert('Erro ao atualizar animal. Por favor, tente novamente.');
                         }
                     }
-            
+
                     // Função para excluir animal
                     async function excluirAnimal(id) {
                         if (confirm('Tem certeza que deseja excluir este animal?')) {
@@ -206,7 +223,7 @@
                                 const response = await fetch(`/user/animal/${id}`, {
                                     method: 'DELETE'
                                 });
-                                
+
                                 if (response.ok) {
                                     alert('Animal excluído com sucesso!');
                                     carregarAnimais();
@@ -219,152 +236,17 @@
                             }
                         }
                     }
-            
+
                     // Carregar animais quando a página carregar
                     document.addEventListener('DOMContentLoaded', carregarAnimais);
                 </script>
-            
-                <style>
-                    .animal-card {
-                        border: 1px solid #ddd;
-                        padding: 15px;
-                        margin: 10px 0;
-                        border-radius: 5px;
-                        background-color: #fff;
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                    }
                 
-                    .animal-info {
-                        margin-bottom: 10px;
-                    }
-                
-                    .animal-info p {
-                        margin: 5px 0;
-                    }
-                
-                    .animal-actions {
-                        display: flex;
-                        gap: 10px;
-                    }
-                
-                    .btn-edit, .btn-danger {
-                        padding: 5px 15px;
-                        border: none;
-                        border-radius: 3px;
-                        cursor: pointer;
-                    }
-                
-                    .btn-edit {
-                        background-color: #007bff;
-                        color: white;
-                    }
-                
-                    .btn-danger {
-                        background-color: #dc3545;
-                        color: white;
-                    }
-                
-                    .edit-form {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 10px;
-                    }
-                
-                    .form-group {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 5px;
-                    }
-                
-                    .error {
-                        color: #dc3545;
-                        text-align: center;
-                        padding: 10px;
-                    }
-                </style>
             </div>
         </section>
-    </main>
+    </main>   
 
-    <script>
-        function toggleForm() {
-            const form = document.getElementById('updateForm');
-            const userInfo = document.getElementById('userInfo');
-            const editButton = document.getElementById('editButton');
-            
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-                userInfo.style.display = 'none';
-                editButton.style.display = 'none';
-            } else {
-                form.style.display = 'none';
-                userInfo.style.display = 'block';
-                editButton.style.display = 'inline-block';
-            }
-        }
 
-        document.getElementById('updateForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const formData = {
-                nome: document.getElementById('nome').value,
-                email: document.getElementById('email').value,
-                telefone: document.getElementById('telefone').value
-            };
-
-            try {
-                const response = await fetch('/user/atualizar', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    // Atualizar os dados exibidos
-                    document.getElementById('displayNome').textContent = formData.nome;
-                    document.getElementById('displayEmail').textContent = formData.email;
-                    document.getElementById('displayTelefone').textContent = formData.telefone;
-                    
-                    toggleForm();
-                    alert('Perfil atualizado com sucesso!');
-                } else {
-                    alert(data.msg || 'Erro ao atualizar perfil');
-                }
-            } catch (err) {
-                console.error('Erro:', err);
-                alert('Erro ao atualizar perfil');
-            }
-        });
-
-        function confirmarExclusao() {
-            if (confirm('Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.')) {
-                excluirConta();
-            }
-        }
-
-        async function excluirConta() {
-            try {
-                const response = await fetch('/user/remover', {
-                    method: 'DELETE'
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    alert(data.msg);
-                    window.location.href = '/login';
-                } else {
-                    alert(data.msg || 'Erro ao excluir conta');
-                }
-            } catch (err) {
-                console.error('Erro:', err);
-                alert('Erro ao excluir conta');
-            }
-        }
-    </script>
+    <script src="/js/index.js"></script>
 </body>
+
 </html>

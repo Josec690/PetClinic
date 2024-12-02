@@ -75,58 +75,51 @@ router.post('/agendar', verifyToken, async (req, res) => {
 // Rota para listar agendamentos do usuário
 router.get('/meus-agendamentos', verifyToken, async (req, res) => {
     try {
-        // Pegar a data atual com hora atual
         const agora = new Date();
-
-        // Pegar a data atual no início do dia
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
 
+        // Buscar tanto agendamentos ativos quanto cancelados
         const agendamentos = await Agendamento.find({ 
             usuario: req.user,
-            status: 'agendado',
-            $or: [
-                // Agendamentos futuros
-                { dataAgendamento: { $gt: agora } },
-                // Agendamentos de hoje que ainda não passaram
-                {
-                    dataAgendamento: {
-                        $gte: hoje,
-                        $gte: agora
-                    }
-                }
-            ]
+            status: { $in: ['agendado', 'cancelado'] } // Modificado para incluir cancelados
         })
         .populate('nomeAnimal')
         .sort({ dataAgendamento: 1 });
             
-        // Filtrar agendamentos com animais excluídos e atualizar seus status
         const agendamentosFiltrados = [];
+        const agendamentosCancelados = []; // Nova array para agendamentos cancelados
+
         for (let agendamento of agendamentos) {
             if (!agendamento.nomeAnimal) {
-                // Se o animal não existe mais, atualizar o status do agendamento
                 await Agendamento.findByIdAndUpdate(agendamento._id, {
                     status: 'cancelado',
                     disponivel: true
                 });
                 continue;
             }
-            // Verificar se o horário do agendamento já passou
+
             const dataAgendamento = new Date(agendamento.dataAgendamento);
-            if (dataAgendamento < agora) {
-                // Atualizar status para 'realizado' se o horário já passou
+            if (dataAgendamento < agora && agendamento.status === 'agendado') {
                 await Agendamento.findByIdAndUpdate(agendamento._id, {
                     status: 'realizado'
                 });
                 continue;
             }
-            agendamentosFiltrados.push(agendamento);
+
+            // Separar agendamentos cancelados dos ativos
+            if (agendamento.status === 'cancelado') {
+                agendamentosCancelados.push(agendamento);
+            } else {
+                agendamentosFiltrados.push(agendamento);
+            }
         }
 
-        // Retornar os agendamentos filtrados e a contagem
         res.json({
             totalAgendamentos: agendamentosFiltrados.length,
-            agendamentos: agendamentosFiltrados
+            totalCancelados: agendamentosCancelados.length,
+            agendamentos: agendamentosFiltrados,
+            agendamentosCancelados: agendamentosCancelados
         });
     } catch (err) {
         console.error('Erro ao buscar agendamentos:', err);

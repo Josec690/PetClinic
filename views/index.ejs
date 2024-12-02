@@ -13,28 +13,29 @@
 <body>
     
     <header>
-        <nav>
+        <nav class="navbar">
             <div class="logo-header">
                 <img src="/img/PatClinic.png" alt="Logo da Pata Clinic">
             </div>
-
-            <div class="header-info">
-                <ul>
-                    <li>Serviços</li>
-                    <li>BENEFÍCIOS</li>
-                    <li>QUEM SOMOS</li>
-                    <li>CONTATO</li>
-                    <li>DÚVIDAS</li>
-                </ul>
+    
+            <ul class="nav-links">
+                <li><a href="#services">Serviços</a></li>
+                <li><a href="#benefits">Benefícios</a></li>
+                <li><a href="#about">Quem Somos</a></li>
+                <li><a href="#contact">Contato</a></li>
+                <li><a href="#faq">Dúvidas</a></li>
+            </ul>
+    
+            <div class="nav-actions">
+                <a href="/login" class="btn-login">Entrar na Conta 🐈‍⬛</a>
+                <a href="/cadastrar" class="btn-signup">Crie sua Conta 🐈</a>
             </div>
-
-            <div class="header-login">
-                <a href="/login">Entrar na Conta 🐈‍⬛</a>
-                <a href="/cadastrar">Crie sua Conta 🐈</a>
-            </div>
-
+    
+            <button class="nav-toggle" aria-label="Abrir Menu">
+                <span class="hamburger"></span>
+            </button>
         </nav>
-
+                                                                        
     </header>
 
     <main>
@@ -59,7 +60,7 @@
             <iframe width="800" height="400" src="https://www.youtube.com/embed/Zv11L-ZfrSg?si=nkL0lwEXoFe-klvC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <div class="container2-buttons">
                 <a href="/login">Cadastrar Animal</a>
-                <a href="/login">Agendar Castração</a>           
+                <a href="/login">Agendar Castração</a>
             </div>
         </div>
 
@@ -85,48 +86,118 @@
             </div>
         </div>
         <div class="container4">
-            <h1>Conheça nossos Benefícios</h1>
-            <div class="container-benefits">
-                <div class="benefits-itens">
-                    <span></span>
-                    <p></p>
-                </div>
-                <div class="benefits-itens">
-                    <p></p>
-                    <span></span>
-                </div>
-                 <div class="benefits-itens">
-                    <span></span>
-                    <p></p>
-                </div>
-                <div class="benefits-itens">
-                    <p></p>
-                    <span></span>
-                </div>
-                 <div class="benefits-itens">
-                    <span></span>
-                    <p></p>
-                </div>
-                <div class="benefits-itens">
-                    <p></p>
-                    <span></span>
-                </div>
-                
-                <button class="criar-lp"></button>
+          <h1>Conheça nossos Benefícios</h1>
+          <div class="container-benefits">
+            <div class="benefits-itens">
+              <span>🐾</span>
+              <p>Atendimento gratuito e acessível para castração e vacinação.</p>
             </div>
+            <div class="benefits-itens">
+              <span>💼</span>
+              <p>Equipe de profissionais qualificados e experientes.</p>
+            </div>
+            <div class="benefits-itens">
+              <span>🏠</span>
+              <p>Atendemos em locais próximos à sua comunidade.</p>
+            </div>
+            <div class="benefits-itens">
+              <span>⏱️</span>
+              <p>Agendamento rápido e prático pelo site.</p>
+            </div>
+            <div class="benefits-itens">
+              <span>🌱</span>
+              <p>Contribuímos para o controle populacional e saúde animal.</p>
+            </div>
+            <div class="benefits-itens">
+              <span>📞</span>
+              <p>Suporte disponível para dúvidas e orientações.</p>
+            </div>
+          </div>
+          <a href="/login"><button class="criar-lp">Quero Agendar</button></a>
+        </div>
+
+
         </div>
         <div class="container5">
             <h1>Venha nos conhecer!</h1>
             <h2>Estamos próximos</h2>
         </div>
+
+        <div class="container5">
+
+
+        </div>
         
-        <div class="container5"></div>        
+        <div class="faq-container">
+            <h2>FAQ - Perguntas Frequentes</h2>
+          
+            <div class="faq-item">
+              <button class="faq-question">1. Quem pode participar do programa de castração gratuita?</button>
+              <div class="faq-answer">
+                <p>O programa é destinado a moradores da região que se encaixem nos critérios socioeconômicos estabelecidos. É necessário comprovar residência e renda.</p>
+              </div>
+            </div>
+          
+            <div class="faq-item">
+              <button class="faq-question">2. Como faço para agendar a castração ou vacinação?</button>
+              <div class="faq-answer">
+                <p>Você pode agendar através do nosso site preenchendo o formulário disponível na seção de agendamentos.</p>
+              </div>
+            </div>
+          
+            <div class="faq-item">
+              <button class="faq-question">3. Quais documentos preciso apresentar?</button>
+              <div class="faq-answer">
+                <p>Você deve apresentar RG, CPF, comprovante de residência e, se necessário, comprovante de renda.</p>
+              </div>
+            </div>
+          
+            <div class="faq-item">
+              <button class="faq-question">4. Existe um limite de animais por pessoa?</button>
+              <div class="faq-answer">
+                <p>Sim, cada pessoa pode inscrever até dois animais por ciclo de atendimento.</p>
+              </div>
+            </div>
+          
+            <div class="faq-item">
+              <button class="faq-question">5. Onde será realizado o atendimento?</button>
+              <div class="faq-answer">
+                <p>Os procedimentos serão realizados no Centro de Controle de Zoonoses ou em clínicas parceiras, dependendo do local mais próximo de sua residência.</p>
+              </div>
+            </div>
+          </div>
+
+
 
     </main>
 
-    <footer>
-
+    <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-about">
+            <h3>Pataclinic</h3>
+            <p>Comprometidos com o bem-estar dos seus pets, oferecendo serviços gratuitos de castração e vacinação.</p>
+          </div>
+      
+          <div class="footer-contact">
+            <h4>Contato</h4>
+            <p><strong>Email:</strong> contato@pataclinic.com.br</p>
+            <p><strong>Telefone:</strong> (11) 1234-5678</p>
+            <p><strong>Endereço:</strong> Rua dos Pets, 123 - São Paulo, SP</p>
+          </div>
+      
+          <div class="footer-social">
+            <h4>Siga-nos</h4>
+            <a href="https://www.facebook.com/" class="social-link" target="_blank">Facebook</a>
+            <a href="https://www.instagram.com/" class="social-link" target="_blank">Instagram</a>
+            <a href="https://www.whatsapp.com/" class="social-link" target="_blank">WhatsApp</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2024 Pataclinic. Todos os direitos reservados.</p>
+        </div>
     </footer>
+
+
     <script src="/js/index.js"></script>
 </body>
 </html>

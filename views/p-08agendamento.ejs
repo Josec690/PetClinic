@@ -15,31 +15,35 @@
     
 </head>
 <body>
+    
     <header>
-        <nav>
+        <nav class="navbar">
             <div class="logo-header">
                 <a href="/"><img src="../img/PatClinic.png" alt="Logo da Pata Clinic"></a>
             </div>
 
-            <div class="header-info">
-                <ul>
-                    <li><a href="/">Início</a></li>
-                    <li><a href="/perfil">Animais Cadastrados</a></li>
-                    <li><a href="#contato">Contato</a></li>
-                    <li><a href="#duvidas">Dúvidas</a></li>
-                </ul>
-            </div>
+            <ul class="nav-links">
+                <li><a href="/">Início</a></li>
+                <li><a href="/perfil">Animais Cadastrados</a></li>
+                <li><a href="#contact">Contato</a></li>
+                <li><a href="#faq">Dúvidas</a></li>
+            </ul>
 
-            <div class="header-login">
+
+            
+            <div class="nav-actions">
                 <a href="/perfil"> 
-                    <span class="perfil-padrao"><i class='bx bxs-user'></i></span>
+                    <span class="btn-login"><i class='bx bxs-user'></i></span>
                      <span class="perfil-ho">
                         <i class='bx bxs-user-circle'></i>
                     </span> Perfil 
                 </a>
 
-                <a href="/cadastrarAnimal">Cadastrar Animal🐈</a>
+                <a href="/cadastrarAnimal" class="btn-signup">Cadastrar Animal🐈</a>
             </div>
+            <button class="nav-toggle" aria-label="Abrir Menu">
+                <span class="hamburger"></span>
+            </button>
 
         </nav>
 
@@ -103,6 +107,16 @@
             <h3>Meus Agendamentos</h3>
             <div id="listaAgendamentos" class="row">
                 <!-- Os agendamentos serão inseridos aqui via JavaScript -->
+            </div>
+            <div class="mt-4">
+                <button class="btn btn-secondary" onclick="toggleCancelados()">
+                    Ver Consultas Canceladas
+                    <span id="totalCancelados" class="badge bg-danger ms-2">0</span>
+                </button>
+            </div>
+            <div id="listaCancelados" class="row mt-3" style="display: none;">
+                <h4>Consultas Canceladas</h4>
+                <!-- Os agendamentos cancelados serão inseridos aqui via JavaScript -->
             </div>
         </div>
     </main>
@@ -211,105 +225,162 @@
             carregarAnimais();
             carregarAgendamentos();
         });
+
+        let canceladosVisiveis = false;
+
+        function toggleCancelados() {
+            const listaCancelados = document.getElementById('listaCancelados');
+            canceladosVisiveis = !canceladosVisiveis;
+            listaCancelados.style.display = canceladosVisiveis ? 'block' : 'none';
+            
+            // Atualizar texto do botão
+            const btn = document.querySelector('button[onclick="toggleCancelados()"]');
+            btn.textContent = canceladosVisiveis ? 'Ocultar Consultas Canceladas' : 'Ver Consultas Canceladas';
+        }
         
         async function carregarAgendamentos() {
-    try {
-        const response = await fetch('/agendamentos/meus-agendamentos');
-        if (!response.ok) throw new Error('Erro ao carregar agendamentos');
+            try {
+                const response = await fetch('/agendamentos/meus-agendamentos');
+                if (!response.ok) throw new Error('Erro ao carregar agendamentos');
+        
+                const { agendamentos, agendamentosCancelados, totalAgendamentos } = await response.json();
+        
+                const container = document.getElementById('listaAgendamentos');
+                container.innerHTML = '';
+        
+                if (!Array.isArray(agendamentos) || agendamentos.length === 0) {
+                    container.innerHTML = '<div class="col-12"><p>Você não possui agendamentos.</p></div>';
+                    return;
+                }
+        
+                // Ordenar agendamentos por data
+                agendamentos.sort((a, b) => new Date(a.dataAgendamento) - new Date(b.dataAgendamento));
+        
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0);
+        
+                // Arrays para separar agendamentos
+                const agendamentosHoje = [];
+                const agendamentosFuturos = [];
+        
+                // Classificar agendamentos em hoje e futuros
+                agendamentos.forEach(agendamento => {
+                    const dataAgendamento = new Date(agendamento.dataAgendamento);
+                    const dataAgendamentoInicio = new Date(dataAgendamento);
+                    dataAgendamentoInicio.setHours(0, 0, 0, 0);
+        
+                    if (dataAgendamentoInicio.getTime() === hoje.getTime()) {
+                        agendamentosHoje.push(agendamento);
+                    } else if (dataAgendamento > hoje) {
+                        agendamentosFuturos.push(agendamento);
+                    }
+                });
+        
+                // Containers para categorias
+                const containerHoje = document.createElement('div');
+                containerHoje.className = 'col-12';
+                containerHoje.innerHTML = `<h4 class="mt-4 mb-3">Agendamentos de Hoje (${agendamentosHoje.length})</h4>`;
+                const gridHoje = document.createElement('div');
+                gridHoje.className = 'row row-cols-1 row-cols-md-2 g-4';
+                containerHoje.appendChild(gridHoje);
+        
+                const containerFuturos = document.createElement('div');
+                containerFuturos.className = 'col-12';
+                containerFuturos.innerHTML = `<h4 class="mt-4 mb-3">Próximos Agendamentos (${agendamentosFuturos.length})</h4>`;
+                const gridFuturos = document.createElement('div');
+                gridFuturos.className = 'row row-cols-1 row-cols-md-2 g-4';
+                containerFuturos.appendChild(gridFuturos);
+        
+                // Processar agendamentos de hoje
+                agendamentosHoje.forEach(agendamento => {
+                    const card = criarCardAgendamento(agendamento);
+                    gridHoje.appendChild(card);
+                });
+        
+                // Processar agendamentos futuros
+                agendamentosFuturos.forEach(agendamento => {
+                    const card = criarCardAgendamento(agendamento);
+                    gridFuturos.appendChild(card);
+                });
+        
+                // Limpar e adicionar seções ao container principal
+                container.innerHTML = '';
+                if (agendamentosHoje.length > 0) container.appendChild(containerHoje);
+                if (agendamentosFuturos.length > 0) container.appendChild(containerFuturos);
+        
+                // Se nenhuma categoria tiver agendamentos
+                if (agendamentosHoje.length === 0 && agendamentosFuturos.length === 0) {
+                    container.innerHTML = '<div class="col-12"><p>Você não possui agendamentos.</p></div>';
+                }
+        
+                // Atualizar contador de cancelados
+                document.getElementById('totalCancelados').textContent = agendamentosCancelados.length;
 
-        const { agendamentos, totalAgendamentos } = await response.json();
+                const containerCancelados = document.getElementById('listaCancelados');
+                containerCancelados.innerHTML = '<h4>Consultas Canceladas</h4>';
+        
+                if (agendamentosCancelados.length === 0) {
+                    containerCancelados.innerHTML += '<div class="col-12"><p>Não há consultas canceladas.</p></div>';
+                } else {
+                    const gridCancelados = document.createElement('div');
+                    gridCancelados.className = 'row row-cols-1 row-cols-md-2 g-4';
+        
+                    agendamentosCancelados.forEach(agendamento => {
+                        const dataAgendamento = new Date(agendamento.dataAgendamento);
+                        const data = dataAgendamento.toLocaleDateString();
+                        const hora = dataAgendamento.toLocaleTimeString().slice(0, 5);
+        
+                        const card = document.createElement('div');
+                        card.className = 'col';
+                        card.innerHTML = `
+                            <div class="agendamento-card cancelado h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="mb-0">Consulta com ${agendamento.nomeMedico}</h5>
+                                    <span class="status-badge status-cancelado">Cancelado</span>
+                                </div>
+                                <p class="mb-2">Animal: ${agendamento.nomeAnimal.nome}</p>
+                                <p class="mb-2">Especialidade: ${agendamento.especialidade}</p>
+                                <p class="mb-2">Data: ${data} às ${hora}</p>
+                            </div>
+                        `;
+                        gridCancelados.appendChild(card);
+                    });
+        
+                    containerCancelados.appendChild(gridCancelados);
+                }
 
-        const container = document.getElementById('listaAgendamentos');
-        container.innerHTML = '';
-
-        // Verifica se há agendamentos
-        if (!Array.isArray(agendamentos) || agendamentos.length === 0) {
-            container.innerHTML = '<div class="col-12"><p>Você não possui agendamentos.</p></div>';
-            return;
-        }
-
-        // Ordenar agendamentos por data
-        agendamentos.sort((a, b) => new Date(a.dataAgendamento) - new Date(b.dataAgendamento));
-
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
-
-        // Containers para categorias
-        const containerHoje = document.createElement('div');
-        containerHoje.className = 'col-12';
-        containerHoje.innerHTML = `<h4 class="mt-4 mb-3">Agendamentos de Hoje (${totalAgendamentos})</h4>`;
-        const gridHoje = document.createElement('div');
-        gridHoje.className = 'row row-cols-1 row-cols-md-2 g-4';
-        containerHoje.appendChild(gridHoje);
-
-        const containerFuturos = document.createElement('div');
-        containerFuturos.className = 'col-12';
-        containerFuturos.innerHTML = `<h4 class="mt-4 mb-3">Próximos Agendamentos (${totalAgendamentos})</h4>`;
-        const gridFuturos = document.createElement('div');
-        gridFuturos.className = 'row row-cols-1 row-cols-md-2 g-4';
-        containerFuturos.appendChild(gridFuturos);
-
-        let temAgendamentosHoje = false;
-        let temAgendamentosFuturos = false;
-
-        // Processar agendamentos
-        agendamentos.forEach(agendamento => {
-            const dataAgendamento = new Date(agendamento.dataAgendamento);
-            const data = dataAgendamento.toLocaleDateString();
-            const hora = dataAgendamento.toLocaleTimeString().slice(0, 5);
-
-            const card = document.createElement('div');
-            card.className = 'col';
-            card.innerHTML = `
-                <div class="agendamento-card ${agendamento.status} h-100">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h5 class="mb-0">Consulta com ${agendamento.nomeMedico}</h5>
-                        <span class="status-badge status-${agendamento.status}">${agendamento.status}</span>
-                    </div>
-                    <p class="mb-2">Animal: ${agendamento.nomeAnimal.nome}</p>
-                    <p class="mb-2">Especialidade: ${agendamento.especialidade}</p>
-                    <p class="mb-2">Data: ${data} às ${hora}</p>
-                    ${agendamento.status === 'agendado' ? `
-                        <button onclick="cancelarAgendamento('${agendamento._id}')" 
-                                class="btn btn-danger btn-sm mt-auto">
-                            Cancelar Agendamento
-                        </button>
-                    ` : ''}
-                </div>
-            `;
-
-            // Classificar em categorias
-            const dataAtual = new Date();
-            dataAtual.setHours(0, 0, 0, 0);
-            const dataAgendamentoInicio = new Date(dataAgendamento);
-            dataAgendamentoInicio.setHours(0, 0, 0, 0);
-
-            if (dataAgendamentoInicio.getTime() === dataAtual.getTime()) {
-                gridHoje.appendChild(card.cloneNode(true));
-                temAgendamentosHoje = true;
-            } else if (dataAgendamento > dataAtual) {
-                gridFuturos.appendChild(card.cloneNode(true));
-                temAgendamentosFuturos = true;
+                function criarCardAgendamento(agendamento) {
+                    const dataAgendamento = new Date(agendamento.dataAgendamento);
+                    const data = dataAgendamento.toLocaleDateString();
+                    const hora = dataAgendamento.toLocaleTimeString().slice(0, 5);
+                
+                    const div = document.createElement('div');
+                    div.className = 'col';
+                    div.innerHTML = `
+                        <div class="agendamento-card ${agendamento.status} h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="mb-0">Consulta com ${agendamento.nomeMedico}</h5>
+                                <span class="status-badge status-${agendamento.status}">${agendamento.status}</span>
+                            </div>
+                            <p class="mb-2">Animal: ${agendamento.nomeAnimal.nome}</p>
+                            <p class="mb-2">Especialidade: ${agendamento.especialidade}</p>
+                            <p class="mb-2">Data: ${data} às ${hora}</p>
+                            ${agendamento.status === 'agendado' ? `
+                                <button onclick="cancelarAgendamento('${agendamento._id}')" 
+                                        class="btn btn-danger btn-sm mt-auto">
+                                    Cancelar Agendamento
+                                </button>
+                            ` : ''}
+                        </div>
+                    `;
+                    return div;
+                }
+        
+            } catch (error) {
+                console.error('Erro ao carregar agendamentos:', error);
+                mostrarErro('Erro ao carregar agendamentos. Por favor, recarregue a página.');
             }
-        });
-
-        // Limpar o container principal
-        container.innerHTML = '';
-
-        // Adicionar seções ao container principal
-        if (temAgendamentosHoje) container.appendChild(containerHoje);
-        if (temAgendamentosFuturos) container.appendChild(containerFuturos);
-
-        // Se nenhuma categoria tiver agendamentos
-        if (!temAgendamentosHoje && !temAgendamentosFuturos) {
-            container.innerHTML = '<div class="col-12"><p>Você não possui agendamentos.</p></div>';
         }
-
-    } catch (error) {
-        console.error('Erro ao carregar agendamentos:', error);
-        mostrarErro('Erro ao carregar agendamentos. Por favor, recarregue a página.');
-    }
-}
 
         async function cancelarAgendamento(id) {
             if (confirm('Deseja cancelar este agendamento?')) {
