@@ -2,6 +2,10 @@ body::-webkit-scrollbar{
     display: none;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 main{
     display: flex;
     flex-direction: column;
@@ -394,6 +398,8 @@ header {
     color: #fff;
     padding: 20px 0;
     font-family: Arial, sans-serif;
+    margin-top: auto; 
+    width: 100%; 
   }
   
   .footer-container {
