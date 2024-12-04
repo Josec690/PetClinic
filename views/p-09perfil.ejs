@@ -274,6 +274,87 @@
     </footer>
 
     <script src="/js/index.js"></script>
+
+    <script>
+        function toggleForm() {
+            const form = document.getElementById('updateForm');
+            const userInfo = document.getElementById('userInfo');
+            const editButton = document.getElementById('editButton');
+            
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                userInfo.style.display = 'none';
+                editButton.style.display = 'none';
+            } else {
+                form.style.display = 'none';
+                userInfo.style.display = 'block';
+                editButton.style.display = 'inline-block';
+            }
+        }
+
+        document.getElementById('updateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                telefone: document.getElementById('telefone').value
+            };
+
+            try {
+                const response = await fetch('/user/atualizar', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Atualizar os dados exibidos
+                    document.getElementById('displayNome').textContent = formData.nome;
+                    document.getElementById('displayEmail').textContent = formData.email;
+                    document.getElementById('displayTelefone').textContent = formData.telefone;
+                    
+                    toggleForm();
+                    alert('Perfil atualizado com sucesso!');
+                } else {
+                    alert(data.msg || 'Erro ao atualizar perfil');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao atualizar perfil');
+            }
+        });
+
+        function confirmarExclusao() {
+            if (confirm('Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.')) {
+                excluirConta();
+            }
+        }
+
+        async function excluirConta() {
+            try {
+                const response = await fetch('/user/remover', {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    alert(data.msg);
+                    window.location.href = '/login';
+                } else {
+                    alert(data.msg || 'Erro ao excluir conta');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao excluir conta');
+            }
+        }
+    </script>
 </body>
 
 </html>
