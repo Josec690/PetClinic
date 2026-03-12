@@ -97,6 +97,7 @@ npm start
 Após iniciar, acesse o sistema pelo navegador em:
 
 ```
+
 http://localhost:5500
 ```
 
@@ -133,4 +134,4 @@ Para contribuir com o projeto, siga os passos abaixo:
 
 ---
 
-Agradecemos o interesse e a colaboração de todos! Vamos juntos melhorar o atendimento e a gestão da Clínica Pata Clinic! 🐾
+Agradecemos o interesse e a colaboração de todos! Vamos juntos melhorar o atendimento e a gestão da Clínica Pata Clinic! 🐾🐾🐾
