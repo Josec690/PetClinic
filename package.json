@@ -15,7 +15,7 @@
     "nodemailer": "^6.9.15",
     "nodemon": "^3.1.7"
   },
-  "name": "petclinic",
+  "name": "pataclinic",
   "version": "1.0.0",
   "description": "# Projeto Crastação para Hospitais Públicos Veterianários",
   "main": "app.js", 
@@ -27,12 +27,12 @@
   },  
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Josec690/PetClinic.git"
+    "url": "git+https://github.com/Josec690/Pataclinic.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Josec690/PetClinic/issues"
+    "url": "https://github.com/Josec690/Pataclinic/issues"
   },
-  "homepage": "https://github.com/Josec690/PetClinic#readme"  
+  "homepage": "https://github.com/Josec690/Pataclinic#readme"  
 }

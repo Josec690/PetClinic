@@ -1,46 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recupere sua senha! | PetClinic</title>
-    <link rel="stylesheet" href="/style/main.css">
-    <link rel="stylesheet" href="/style/style02.css">
-    <link rel="stylesheet" href="/style/vlibras.css">
-    <link rel="icon" href="/img/PatClinic.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recupere sua senha! | Pataclinic</title>
+    <link rel="stylesheet" href="/style/main.css" />
+    <link rel="stylesheet" href="/style/style02.css" />
+    <link rel="stylesheet" href="/style/vlibras.css" />
+    <link rel="icon" href="/img/PatClinic.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <script src="/js/vlibras.js"></script>
-</head>
-<body>
-      
+  </head>
+  <body>
     <div class="logo">
-        <a href="/"><img src="/img/PatClinic.png" alt=""> </a>
+      <a href="/"><img src="/img/PatClinic.png" alt="" /> </a>
     </div>
     <div class="container">
-        <h1>Recuperando Sua Senha!</h1>
-        
-        <form action="/api/auth/recuperar" method="POST">
-            <label for="email">Informe o email cadastrado:</label>
-            <div class="costume-input">
-                <input type="email" name="email" 
-                placeholder="Insira o Email" title="Insira seu email"
-                autocomplete="off">
-                <i class='bx bx-at'></i>
-            </div>
-            <button type="submit" class="login">Enviar link de recuperação</button>
+      <h1>Recuperando Sua Senha!</h1>
 
-                       
-        </form>
-
-        <script src="/js/mostrar.js"></script>    
-        
-        <div class="links">
-            <a href="/login">Acesse sua conta.</a>
-            <a href="/cadastrar">Não tem uma conta?</a>
+      <form action="/api/auth/recuperar" method="POST">
+        <label for="email">Informe o email cadastrado:</label>
+        <div class="costume-input">
+          <input
+            type="email"
+            name="email"
+            placeholder="Insira o Email"
+            title="Insira seu email"
+            autocomplete="off"
+          />
+          <i class="bx bx-at"></i>
         </div>
-    </div>
+        <button type="submit" class="login">Enviar link de recuperação</button>
+      </form>
 
-    
-</body>
+      <script src="/js/mostrar.js"></script>
+
+      <div class="links">
+        <a href="/login">Acesse sua conta.</a>
+        <a href="/cadastrar">Não tem uma conta?</a>
+      </div>
+    </div>
+  </body>
 </html>

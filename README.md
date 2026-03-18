@@ -51,8 +51,8 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
 ### 📥 1. Clone o Repositório
 
 ```bash
-git clone https://github.com/Josec690/PetClinic.git
-cd PetClinic
+git clone https://github.com/Josec690/Pataclinic.git
+cd Pataclinic
 ```
 
 ### 📦 2. Instale as Dependências
